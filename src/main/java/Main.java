@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 public class Main {
     static boolean needToQuit = false;
@@ -11,9 +12,7 @@ public class Main {
         System.out.println("Список задач");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        //List<TaskDescription> tasks = new ArrayList<>();
-        // need the type "TreeMap" because of using "lastKey()"
-        TreeMap<Integer, TaskDescription> tasks = new TreeMap<>();
+        List<TaskDescription> tasks = new ArrayList<>();
 
         Map<String, Consumer<String>> commands = new HashMap<>();
 
@@ -21,41 +20,34 @@ public class Main {
             if (checkName(name)) return;
 
             TaskDescription taskDescription = new TaskDescription(name);
-            int key;
-            if (tasks.isEmpty()){
-                key = 1;
-            } else {
-                key = tasks.lastKey() + 1;
-            }
-            tasks.put(key, taskDescription);
+            tasks.add(taskDescription);
         });
 
-        commands.put("print", (argument) -> {
-            // аргумент "all" воспринимается, остальное игнорируется
-            tasks.entrySet().stream()
-                    .filter((entry) -> {TaskDescription task = entry.getValue();
-                        return argument.equals("all") || !(task.isCompleted());
-                    })
-                    .forEach(Main::printTask);
-        });
+        commands.put("print", (argument) -> IntStream.range(0, tasks.size())
+                .filter((index) -> {TaskDescription task = tasks.get(index);
+                    return argument.equals("all") || !(task.isCompleted());
+                })
+                .forEach((index) -> printTask(index, tasks.get(index))));
 
         commands.put("toggle", (stringNumber) -> {
             Integer number = getNumber(stringNumber);
             if (number == null) return;
+            if (number <= 0 || number > tasks.size()) return;
+
             TaskDescription taskDescription;
-            taskDescription = tasks.get(number);
+            taskDescription = tasks.get(number - 1);
             if (taskDescription == null) {
                 System.out.println("идентификатор не определен");
                 return;
             }
             taskDescription.toggle();
-
         });
 
         commands.put("delete", (stringNumber) -> {
             Integer number = getNumber(stringNumber);
             if (number == null) return;
-            tasks.remove(number);
+            if (number <= 0 || number > tasks.size()) return;
+            tasks.remove(number - 1);
         });
 
         commands.put("edit", (argumentCommandWord) -> {
@@ -67,10 +59,10 @@ public class Main {
             String stringNumber = wordDelimiter.firstWord;
             Integer number = getNumber(stringNumber);
             if (number == null) return;
-
+            if (number <= 0 || number > tasks.size()) return;
 
             TaskDescription taskDescription;
-            taskDescription = tasks.get(number);
+            taskDescription = tasks.get(number - 1);
             if (taskDescription == null) {
                 System.out.println("идентификатор не определен");
                 return;
@@ -82,11 +74,11 @@ public class Main {
         commands.put("search", (substring) -> {
             if (checkName(substring)) return;
 
-            tasks.entrySet().stream()
-                    .filter((entry) -> {TaskDescription task = entry.getValue();
+            IntStream.range(0, tasks.size())
+                    .filter((index) -> {TaskDescription task = tasks.get(index);
                         return task.getName().contains(substring);
                     })
-                    .forEach(Main::printTask);
+                    .forEach((index) -> printTask(index, tasks.get(index)));
         });
 
 
@@ -109,7 +101,6 @@ public class Main {
 
             if (commandName == null)
                 break;
-
 
             WordDelimiter wordDelimiter = new WordDelimiter(commandName);
             String mainCommandWord = wordDelimiter.firstWord;
@@ -166,11 +157,8 @@ public class Main {
         return number;
     }
 
-    private static void printTask(Map.Entry<Integer, TaskDescription> entry) {
-        Integer key = entry.getKey();
-        TaskDescription task = entry.getValue();
-        System.out.printf("%d. [%s] %s%n", key, (task.isCompleted() ? "x" : " "), task.getName());
+    private static void printTask(int key, TaskDescription task) {
+        System.out.printf("%d. [%s] %s%n", key + 1, (task.isCompleted() ? "x" : " "), task.getName());
     }
-
 
 }
