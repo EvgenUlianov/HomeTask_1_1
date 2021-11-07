@@ -17,7 +17,7 @@ public class Main {
 
     static private boolean LOGGING_ENABLED;
 
-    {
+    static {
         LOGGING_ENABLED = false;
     }
 
@@ -66,10 +66,6 @@ public class Main {
 
             TaskDescription taskDescription;
             taskDescription = tasks.get(number - 1);
-//            if (taskDescription == null) {
-//                printAndLog("идентификатор не определен");
-//                return;
-//            }
             taskDescription.toggle();
         });
 
@@ -99,10 +95,6 @@ public class Main {
 
             TaskDescription taskDescription;
             taskDescription = tasks.get(number - 1);
-//            if (taskDescription == null) {
-//                printAndLog("идентификатор не определен");
-//                return;
-//            }
             taskDescription.setName(name);
 
         });
