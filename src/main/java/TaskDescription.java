@@ -14,10 +14,6 @@ public class TaskDescription {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-
     public TaskDescription(String name) {
         this.name = name;
         this.completed = false;

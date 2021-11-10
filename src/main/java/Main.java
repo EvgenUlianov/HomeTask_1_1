@@ -1,15 +1,20 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
+@Slf4j
 public class Main {
     static boolean needToQuit = false;
 
     public static void main(String[] args) {
         System.out.println("Список задач");
+
+        log.info("Запуск программы Список задач");
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         List<TaskDescription> tasks = new ArrayList<>();
@@ -32,21 +37,23 @@ public class Main {
         commands.put("toggle", (stringNumber) -> {
             Integer number = getNumber(stringNumber);
             if (number == null) return;
-            if (number <= 0 || number > tasks.size()) return;
+            if (number <= 0 || number > tasks.size()) {
+                printAndLog(String.format("идентификатор %d вне границ массива задач", number));
+                return;
+            }
 
             TaskDescription taskDescription;
             taskDescription = tasks.get(number - 1);
-            if (taskDescription == null) {
-                System.out.println("идентификатор не определен");
-                return;
-            }
             taskDescription.toggle();
         });
 
         commands.put("delete", (stringNumber) -> {
             Integer number = getNumber(stringNumber);
             if (number == null) return;
-            if (number <= 0 || number > tasks.size()) return;
+            if (number <= 0 || number > tasks.size()) {
+                printAndLog(String.format("идентификатор %d вне границ массива задач", number));
+                return;
+            }
             tasks.remove(number - 1);
         });
 
@@ -59,14 +66,13 @@ public class Main {
             String stringNumber = wordDelimiter.firstWord;
             Integer number = getNumber(stringNumber);
             if (number == null) return;
-            if (number <= 0 || number > tasks.size()) return;
+            if (number <= 0 || number > tasks.size()) {
+                printAndLog(String.format("идентификатор %d вне границ массива задач", number));
+                return;
+            }
 
             TaskDescription taskDescription;
             taskDescription = tasks.get(number - 1);
-            if (taskDescription == null) {
-                System.out.println("идентификатор не определен");
-                return;
-            }
             taskDescription.setName(name);
 
         });
@@ -96,8 +102,10 @@ public class Main {
             try {
                 commandName = reader.readLine();
             } catch (IOException e) {
+                log.error(e.getMessage(), e);
                 e.printStackTrace();
             }
+            log.debug("User input: {}", commandName);
 
             if (commandName == null)
                 break;
@@ -108,7 +116,7 @@ public class Main {
 
             Consumer<String> command = commands.get(mainCommandWord);
             if (command == null) {
-                System.out.println("Unknown command");
+                printAndLog(String.format("Unknown command %s", mainCommandWord));
             } else {
                 command.accept(argumentCommandWord);
             }
@@ -135,7 +143,7 @@ public class Main {
 
     private static boolean checkName (String name) {
         if (name.length() == 0) {
-            System.out.println("Не указано наименование");
+            printAndLog("Не указано наименование");
             return true;
         }
         return false;
@@ -143,7 +151,7 @@ public class Main {
 
     private static Integer getNumber(String stringNumber) {
         if (stringNumber.length() == 0) {
-            System.out.println("Не указан номер");
+            printAndLog("Не указан номер");
             return null;
         }
 
@@ -151,6 +159,7 @@ public class Main {
         try {
             number = Integer.parseInt(stringNumber);
         } catch (NumberFormatException ex) {
+            log.error(ex.getMessage(), ex);
             ex.printStackTrace();
             return null;
         }
@@ -161,4 +170,26 @@ public class Main {
         System.out.printf("%d. [%s] %s%n", key + 1, (task.isCompleted() ? "x" : " "), task.getName());
     }
 
+    public static void printAndLog(String msg){
+        System.out.println(msg);
+        log.error(msg);
+        /*
+        может-быть пригодится когда-нибудь
+        if (Main.isLoggingEnabled()) {
+
+            StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(msg);
+            if (trace.length > 2) {
+                stringBuilder.append("\n");
+                IntStream.range(2, trace.length)
+                        .forEach((index) -> {
+                            String traceText = trace[index].toString();
+                            stringBuilder.append("\t\t");
+                            stringBuilder.append(traceText);
+                            stringBuilder.append("\n");
+                        });
+            }
+        }*/
+    }
 }
