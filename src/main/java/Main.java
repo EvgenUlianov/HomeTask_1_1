@@ -1,43 +1,21 @@
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-
+@Slf4j
 public class Main {
     static boolean needToQuit = false;
-
-    private static class ProgramKeyWords {
-        static final private String LOGGING_ENABLED = "loggingEnabled";
-    }
-
-    static private boolean LOGGING_ENABLED;
-
-    static {
-        LOGGING_ENABLED = false;
-    }
-
-    public static boolean isLoggingEnabled() {
-        return LOGGING_ENABLED;
-    }
 
     public static void main(String[] args) {
         System.out.println("Список задач");
 
-        Arrays.stream(args).forEach(programArgument -> {
-            if(programArgument.equals(ProgramKeyWords.LOGGING_ENABLED)) LOGGING_ENABLED = true;});
-
-        if (Main.isLoggingEnabled()) {
-            Logger logger = LoggerFactory.getLogger(Main.class);
-            logger.info("Запуск программы Список задач");
-        }
+        log.info("Запуск программы Список задач");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
 
         List<TaskDescription> tasks = new ArrayList<>();
 
@@ -124,9 +102,10 @@ public class Main {
             try {
                 commandName = reader.readLine();
             } catch (IOException e) {
-                logException(e);
+                log.error(e.getMessage(), e);
                 e.printStackTrace();
             }
+            log.debug("User input: {}", commandName);
 
             if (commandName == null)
                 break;
@@ -180,7 +159,7 @@ public class Main {
         try {
             number = Integer.parseInt(stringNumber);
         } catch (NumberFormatException ex) {
-            logException(ex);
+            log.error(ex.getMessage(), ex);
             ex.printStackTrace();
             return null;
         }
@@ -193,10 +172,12 @@ public class Main {
 
     public static void printAndLog(String msg){
         System.out.println(msg);
+        log.error(msg);
+        /*
+        может-быть пригодится когда-нибудь
         if (Main.isLoggingEnabled()) {
-            Logger logger = LoggerFactory.getLogger(Main.class);
-            StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 
+            StackTraceElement[] trace = Thread.currentThread().getStackTrace();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(msg);
             if (trace.length > 2) {
@@ -209,14 +190,6 @@ public class Main {
                             stringBuilder.append("\n");
                         });
             }
-            logger.debug(stringBuilder.toString());
-        }
-    }
-
-    public static void logException(Throwable ex) {
-        if (Main.isLoggingEnabled()) {
-            Logger logger = LoggerFactory.getLogger(Main.class);
-            logger.error(ex.getMessage(), ex);
-        }
+        }*/
     }
 }
