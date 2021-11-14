@@ -1,4 +1,7 @@
+package TaskManager;
+
 public class TaskDescription {
+    //Encapsulation
     private String name;
     private boolean completed;
 
