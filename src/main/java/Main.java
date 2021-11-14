@@ -10,7 +10,6 @@ import java.util.stream.IntStream;
 
 @Slf4j
 public class Main {
-    static boolean needToQuit = false;
 
     public static void main(String[] args) {
         System.out.println("Список задач");
