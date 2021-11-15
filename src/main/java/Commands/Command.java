@@ -12,7 +12,7 @@ public abstract class Command {
 
     public abstract void accept(String argumentCommandWord);
 
-    public static boolean checkName (String name) {
+    protected static boolean checkName (String name) {
         if (name.length() == 0) {
             printAndLog("Не указано наименование");
             return true;
@@ -20,7 +20,7 @@ public abstract class Command {
         return false;
     }
 
-    public static Integer getNumber(String stringNumber) {
+    protected static Integer getNumber(String stringNumber) {
         if (stringNumber.length() == 0) {
             printAndLog("Не указан номер");
             return null;
@@ -37,7 +37,7 @@ public abstract class Command {
         return number;
     }
 
-    public static void printAndLog(String msg){
+    protected static void printAndLog(String msg){
         System.out.println(msg);
         log.error(msg);
         /*
