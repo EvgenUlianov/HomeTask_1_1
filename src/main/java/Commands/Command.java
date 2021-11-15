@@ -1,10 +1,16 @@
-package General;
+package Commands;
 
 import lombok.extern.slf4j.Slf4j;
 
+//Pattern strategy for abstract class Command
 @Slf4j
-public class BasicFunctions {
-    private BasicFunctions(){};
+public abstract class Command {
+
+    public abstract String getName();
+
+    public abstract String getDescription();
+
+    public abstract void accept(String argumentCommandWord);
 
     public static boolean checkName (String name) {
         if (name.length() == 0) {
@@ -53,5 +59,4 @@ public class BasicFunctions {
             }
         }*/
     }
-
 }

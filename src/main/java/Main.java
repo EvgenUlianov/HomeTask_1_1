@@ -1,12 +1,12 @@
 
+import Commands.Command;
 import General.*;
-import TaskManager.*;
 import lombok.extern.slf4j.Slf4j;
+import org.reflections.Reflections;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 @Slf4j
 public class Main {
@@ -18,101 +18,22 @@ public class Main {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        Map<String, Consumer<String>> commands = new HashMap<>();
+        Map<String, Command> commands1 = new TreeMap<>();
 
-        //Pattern strategy for interface Consumer<String>
-        commands.put("add", (name) -> {
-            if (BasicFunctions.checkName(name)) return;
-            //Abstraction: we are going to change "List" to Database
-            TasksData tasks = TasksDataList.get();
-            TaskDescription taskDescription = new TaskDescription(name);
-            tasks.add(taskDescription);
-        });
-
-        //Pattern strategy for interface Consumer<String>
-        commands.put("print", (argument) -> {
-            //Abstraction: we are going to change "List" to Database
-            TasksData tasks = TasksDataList.get();
-            IntStream.range(0, tasks.size())
-                .filter((index) -> {TaskDescription task = tasks.get(index);
-                    return argument.equals("all") || !(task.isCompleted());
-                })
-                .forEach(tasks::printTask);});
-
-        //Pattern strategy for interface Consumer<String>
-        commands.put("toggle", (stringNumber) -> {
-            Integer number = BasicFunctions.getNumber(stringNumber);
-            //Abstraction: we are going to change "List" to Database
-            TasksData tasks = TasksDataList.get();
-            if (number == null) return;
-            if (number <= 0 || number > tasks.size()) {
-                BasicFunctions.printAndLog(String.format("идентификатор %d вне границ массива задач", number));
-                return;
+        Set<Class<? extends Command>> subTypes = new Reflections("Commands").getSubTypesOf(Command.class);
+        for (Class clazz : subTypes) {
+            try {
+                Command command = (Command) clazz.getDeclaredConstructor().newInstance();
+                commands1.put(command.getName(), command);
+            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                log.error(e.getMessage(), e);
+                e.printStackTrace();
             }
-
-            TaskDescription taskDescription;
-            taskDescription = tasks.get(number - 1);
-            taskDescription.toggle();
-        });
-
-        //Pattern strategy for interface Consumer<String>
-        commands.put("delete", (stringNumber) -> {
-            Integer number = BasicFunctions.getNumber(stringNumber);
-            //Abstraction: we are going to change "List" to Database
-            TasksData tasks = TasksDataList.get();
-            if (number == null) return;
-            if (number <= 0 || number > tasks.size()) {
-                BasicFunctions.printAndLog(String.format("идентификатор %d вне границ массива задач", number));
-                return;
-            }
-            tasks.remove(number - 1);
-        });
-
-        //Pattern strategy for interface Consumer<String>
-        commands.put("edit", (argumentCommandWord) -> {
-
-            WordDelimiter wordDelimiter = new WordDelimiter(argumentCommandWord);
-            String name = wordDelimiter.getSecondWord();
-            if (BasicFunctions.checkName(name)) return;
-
-            String stringNumber = wordDelimiter.getFirstWord();
-            Integer number = BasicFunctions.getNumber(stringNumber);
-            if (number == null) return;
-            //Abstraction: we are going to change "List" to Database
-            TasksData tasks = TasksDataList.get();
-            if (number <= 0 || number > tasks.size()) {
-                BasicFunctions.printAndLog(String.format("идентификатор %d вне границ массива задач", number));
-                return;
-            }
-
-            TaskDescription taskDescription;
-            taskDescription = tasks.get(number - 1);
-            taskDescription.setName(name);
-
-        });
-
-        //Pattern strategy for interface Consumer<String>
-        commands.put("search", (substring) -> {
-            if (BasicFunctions.checkName(substring)) return;
-            //Abstraction: we are going to change "List" to Database
-            TasksData tasks = TasksDataList.get();
-
-            IntStream.range(0, tasks.size())
-                    .filter((index) -> {TaskDescription task = tasks.get(index);
-                        return task.getName().contains(substring);
-                    })
-                    .forEach(tasks::printTask);
-        });
-
-        //Pattern strategy for interface Consumer<String>
-        commands.put("quit", (argument) -> {
-            CompletionControl completionControl = CompletionControl.get();
-            completionControl.setMustBeCompleted(true);
-            System.out.println("Программа завершена");
-        });
+        }
 
         System.out.println("Список комманд: ");
-        commands.keySet().forEach(System.out::println);
+        //       commands1.values().map((command) -> {command.getDescription();}).forEach(System.out::println);
+       commands1.values().forEach((command) -> {System.out.println(command.getDescription());});
 
         CompletionControl completionControl = CompletionControl.get();
         do {
@@ -133,9 +54,11 @@ public class Main {
             String mainCommandWord = wordDelimiter.getFirstWord();
             String argumentCommandWord = wordDelimiter.getSecondWord();
 
-            Consumer<String> command = commands.get(mainCommandWord);
+            Command command = commands1.get(mainCommandWord);
             if (command == null) {
-                BasicFunctions.printAndLog(String.format("Unknown command %s", mainCommandWord));
+                String msg = String.format("Unknown command %s", mainCommandWord);
+                System.out.println(msg);
+                log.error(msg);
             } else {
                 command.accept(argumentCommandWord);
             }
