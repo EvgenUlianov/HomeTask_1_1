@@ -4,7 +4,8 @@ import TaskManager.TaskDescription;
 import TaskManager.TasksData;
 import TaskManager.TasksDataList;
 
-public class Add extends Command{
+public class Add implements Command{
+
     @Override
     public String getName() {
         return "add";
@@ -17,7 +18,7 @@ public class Add extends Command{
 
     @Override
     public void accept(String name) {
-        if (super.checkName(name)) return;
+        if (TaskDescription.checkName(name)) return;
         //Abstraction: we are going to change "List" to Database
         TasksData tasks = TasksDataList.get();
         TaskDescription taskDescription = new TaskDescription(name);

@@ -32,8 +32,7 @@ public class Main {
         }
 
         System.out.println("Список комманд: ");
-        //       commands1.values().map((command) -> {command.getDescription();}).forEach(System.out::println);
-       commands1.values().forEach((command) -> {System.out.println(command.getDescription());});
+        commands1.values().forEach((command) -> {System.out.println(command.getDescription());});
 
         CompletionControl completionControl = CompletionControl.get();
         do {

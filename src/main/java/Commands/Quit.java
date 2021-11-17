@@ -2,7 +2,8 @@ package Commands;
 
 import General.CompletionControl;
 
-public class Quit extends Command{
+public class Quit implements Command{
+
     @Override
     public String getName() {
         return "quit";

@@ -4,7 +4,8 @@ import TaskManager.TaskDescription;
 import TaskManager.TasksData;
 import TaskManager.TasksDataList;
 
-public class Toggle extends  Command{
+public class Toggle implements  Command{
+
     @Override
     public String getName() {
         return "toggle";
@@ -17,17 +18,9 @@ public class Toggle extends  Command{
 
     @Override
     public void accept(String stringNumber) {
-        Integer number = super.getNumber(stringNumber);
-        //Abstraction: we are going to change "List" to Database
         TasksData tasks = TasksDataList.get();
-        if (number == null) return;
-        if (number <= 0 || number > tasks.size()) {
-            super.printAndLog(String.format("идентификатор %d вне границ массива задач", number));
-            return;
-        }
-
-        TaskDescription taskDescription;
-        taskDescription = tasks.get(number - 1);
-        taskDescription.toggle();
+        TaskDescription taskDescription = tasks.get(stringNumber);
+        if (taskDescription != null)
+            taskDescription.toggle();
     }
 }
