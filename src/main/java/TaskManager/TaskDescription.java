@@ -1,5 +1,6 @@
 package TaskManager;
 
+import IO.IOStream;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,8 +33,9 @@ public class TaskDescription {
 
     public static boolean checkName (String name) {
         if (name.length() == 0) {
+            IOStream ioStream = IOStream.get();
             String msg = "Не указано наименование";
-            System.out.println(msg);
+            ioStream.println(msg);
             log.error(msg);
             return true;
         }

@@ -1,10 +1,10 @@
 
 import Commands.Command;
 import General.*;
+import IO.IOStream;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 
-import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -12,11 +12,12 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Список задач");
+        IOStream ioStream = IOStream.get();
+        ioStream.println("Список задач");
 
         log.info("Запуск программы Список задач");
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         Map<String, Command> commands1 = new TreeMap<>();
 
@@ -31,19 +32,19 @@ public class Main {
             }
         }
 
-        System.out.println("Список комманд: ");
-        commands1.values().forEach((command) -> {System.out.println(command.getDescription());});
+        ioStream.println("Список комманд: ");
+        commands1.values().forEach((command) -> {ioStream.println(command.getDescription());});
 
         CompletionControl completionControl = CompletionControl.get();
         do {
-            System.out.println("type command");
-            String commandName = null;
-            try {
-                commandName = reader.readLine();
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-                e.printStackTrace();
-            }
+            ioStream.println("type command");
+            String commandName = ioStream.readLine();
+//            try {
+//                commandName = reader.readLine();
+//            } catch (IOException e) {
+//                log.error(e.getMessage(), e);
+//                e.printStackTrace();
+//            }
             log.debug("User input: {}", commandName);
 
             if (commandName == null)
@@ -56,7 +57,7 @@ public class Main {
             Command command = commands1.get(mainCommandWord);
             if (command == null) {
                 String msg = String.format("Unknown command %s", mainCommandWord);
-                System.out.println(msg);
+                ioStream.println(msg);
                 log.error(msg);
             } else {
                 command.accept(argumentCommandWord);

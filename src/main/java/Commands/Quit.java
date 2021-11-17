@@ -1,6 +1,7 @@
 package Commands;
 
 import General.CompletionControl;
+import IO.IOStream;
 
 public class Quit implements Command{
 
@@ -18,6 +19,7 @@ public class Quit implements Command{
     public void accept(String argumentCommandWord) {
         CompletionControl completionControl = CompletionControl.get();
         completionControl.setMustBeCompleted(true);
-        System.out.println("Программа завершена");
+        IOStream ioStream = IOStream.get();
+        ioStream.println("Программа завершена");
     }
 }

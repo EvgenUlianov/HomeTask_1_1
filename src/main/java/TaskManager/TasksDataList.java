@@ -1,5 +1,6 @@
 package TaskManager;
 
+import IO.IOStream;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.stream.IntStream;
 public class TasksDataList implements TasksData {
 
     private final static int OUT_OF_INDEX = -1;
+    private final IOStream ioStream;
 
     //Encapsulation
     private final List<TaskDescription> tasks;
@@ -66,7 +68,7 @@ public class TasksDataList implements TasksData {
     @Override
     public void printTask(int key) {
         TaskDescription task = tasks.get(key);
-        System.out.printf("%d. [%s] %s%n", key + 1, (task.isCompleted() ? "x" : " "), task.getName());
+        ioStream.println(String.format("%d. [%s] %s", key + 1, (task.isCompleted() ? "x" : " "), task.getName()));
     }
 
     // private service ++
@@ -102,7 +104,7 @@ public class TasksDataList implements TasksData {
 
     //Encapsulation
     private void printAndLog(String msg){
-        System.out.println(msg);
+        ioStream.println(msg);
         log.error(msg);
         /*
         может-быть пригодится когда-нибудь
@@ -130,6 +132,7 @@ public class TasksDataList implements TasksData {
 
     private TasksDataList(){
         tasks = new ArrayList<>();
+        ioStream = IOStream.get();
     }
 
     private static class Holder {
