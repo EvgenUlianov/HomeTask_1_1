@@ -1,5 +1,12 @@
+package EvgenUlianov.HomeTask_1_1.TaskManager;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class TaskDescription {
+    //Encapsulation
     private String name;
+
     private boolean completed;
 
     public String getName() {
@@ -14,10 +21,6 @@ public class TaskDescription {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-
     public TaskDescription(String name) {
         this.name = name;
         this.completed = false;
@@ -26,4 +29,5 @@ public class TaskDescription {
     public void toggle() {
         completed = !(completed);
     }
+
 }
