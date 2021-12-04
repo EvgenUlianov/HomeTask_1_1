@@ -1,8 +1,5 @@
 package EvgenUlianov.HomeTask_1_1.TaskManager;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class TaskDescription {
     //Encapsulation
     private String name;

@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -21,32 +22,15 @@ public class HomeTask11Application implements CommandLineRunner {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(HomeTask11Application.class, args);
     }
+
+    @Autowired
+    private List<Command> commandsList;
+
     @Autowired
     private CompletionControl completionControl;
 
     @Autowired
     private IOStream ioStream;
-
-    @Autowired
-    private Add add;
-
-    @Autowired
-    private Delete delete;
-
-    @Autowired
-    private Edit edit;
-
-    @Autowired
-    private Print print;
-
-    @Autowired
-    private Quit quit;
-
-    @Autowired
-    private Search search;
-
-    @Autowired
-    private Toggle toggle;
 
     private Map<String, Command> commands;
 
@@ -59,15 +43,9 @@ public class HomeTask11Application implements CommandLineRunner {
         log.info("Запуск программы Список задач");
 
         commands = new TreeMap<>();
-        commands.put(add.getName(),    add);
-        commands.put(delete.getName(), delete);
-        commands.put(edit.getName(),   edit);
-        commands.put(print.getName(),  print);
-        commands.put(quit.getName(),   quit);
-        commands.put(search.getName(), search);
-        commands.put(toggle.getName(), toggle);
-////        Map<String, Command> commands = new TreeMap<>();
-////
+        commandsList.stream().forEach((command)->commands.put(command.getName(),    command));
+
+        // оставлю этот код, чтобы помнить про рефлекссии
 ////        Set<Class<? extends Command>> subTypes = new Reflections("EvgenUlianov.HomeTask_1_1.Commands").getSubTypesOf(Command.class);
 ////        for (Class clazz : subTypes) {
 ////            try {

@@ -2,17 +2,15 @@ package EvgenUlianov.HomeTask_1_1.Commands;
 
 import EvgenUlianov.HomeTask_1_1.TaskManager.NameController;
 import EvgenUlianov.HomeTask_1_1.TaskManager.TasksDataList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class Search implements Command{
 
-    @Autowired
-    private TasksDataList tasks;
-
-    @Autowired
-    private NameController nameController;
+    final private TasksDataList tasks;
+    final private NameController nameController;
 
     @Override
     public String getName() {

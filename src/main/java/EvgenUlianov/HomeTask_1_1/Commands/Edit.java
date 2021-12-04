@@ -4,17 +4,16 @@ import EvgenUlianov.HomeTask_1_1.General.WordDelimiter;
 import EvgenUlianov.HomeTask_1_1.TaskManager.NameController;
 import EvgenUlianov.HomeTask_1_1.TaskManager.TaskDescription;
 import EvgenUlianov.HomeTask_1_1.TaskManager.TasksDataList;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class Edit implements Command{
 
-    @Autowired
-    private TasksDataList tasks;
-
-    @Autowired
-    private NameController nameController;
+    final private TasksDataList tasks;
+    final private NameController nameController;
 
     @Override
     public String getName() {

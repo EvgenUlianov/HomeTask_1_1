@@ -2,17 +2,16 @@ package EvgenUlianov.HomeTask_1_1.Commands;
 
 import EvgenUlianov.HomeTask_1_1.General.CompletionControl;
 import EvgenUlianov.HomeTask_1_1.IO.IOStream;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class Quit implements Command{
 
-    @Autowired
-    private CompletionControl completionControl;
-
-    @Autowired
-    private IOStream ioStream;
+    final private CompletionControl completionControl;
+    final private IOStream ioStream;
 
     @Override
     public String getName() {
