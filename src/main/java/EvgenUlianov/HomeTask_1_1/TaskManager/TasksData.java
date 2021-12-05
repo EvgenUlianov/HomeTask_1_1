@@ -1,5 +1,6 @@
 package EvgenUlianov.HomeTask_1_1.TaskManager;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 //Abstraction: we are going to change "List" to Database
@@ -17,6 +18,8 @@ public interface TasksData {
     TaskDescription get(String stringNumber);
 
     void printTasks(Predicate<TaskDescription> predicate);
+
+    List<TaskDescriptionWeb> getTasksWeb(Predicate<TaskDescription> predicate);
 
     void printTask(int key);
 

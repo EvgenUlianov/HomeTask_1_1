@@ -75,10 +75,24 @@ public class TasksDataList implements TasksData {
     }
 
     @Override
+    public List<TaskDescriptionWeb> getTasksWeb(Predicate<TaskDescription> predicate) {
+        List<TaskDescriptionWeb> listWeb = new ArrayList<>();
+        IntStream.range(0, tasks.size())
+                .filter((index) -> {
+                    TaskDescription task = tasks.get(index);
+                    return predicate.test(task);
+                })
+                .forEach((index) -> {listWeb.add(new TaskDescriptionWeb(index + 1, tasks.get(index)));});
+
+        return listWeb;
+    }
+
+    @Override
     public void printTask(int key) {
         TaskDescription task = tasks.get(key);
         ioStream.println(String.format("%d. [%s] %s", key + 1, (task.isCompleted() ? "x" : " "), task.getName()));
     }
+
 
     // private service ++
 
