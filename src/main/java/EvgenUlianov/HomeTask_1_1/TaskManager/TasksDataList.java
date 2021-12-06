@@ -64,6 +64,7 @@ public class TasksDataList implements TasksData {
         return null;
     }
 
+    @Deprecated
     @Override
     public void printTasks(Predicate<TaskDescription> predicate) {
         IntStream.range(0, tasks.size())
@@ -87,6 +88,7 @@ public class TasksDataList implements TasksData {
         return listWeb;
     }
 
+    @Deprecated
     @Override
     public void printTask(int key) {
         TaskDescription task = tasks.get(key);

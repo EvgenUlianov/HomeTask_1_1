@@ -17,10 +17,12 @@ public interface TasksData {
 
     TaskDescription get(String stringNumber);
 
+    @Deprecated
     void printTasks(Predicate<TaskDescription> predicate);
 
     List<TaskDescriptionWeb> getTasksWeb(Predicate<TaskDescription> predicate);
 
+    @Deprecated
     void printTask(int key);
 
 

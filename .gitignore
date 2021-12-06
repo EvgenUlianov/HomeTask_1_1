@@ -31,10 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
-/log.txt
-/log.txt.2021-11-27.0.gz
-/log.txt.2021-11-28.0.gz
-/log.txt.2021-11-29.0.gz
 /.idea/
-/log.txt.2021-12-01.0.gz
-/log.txt.2021-12-04.0.gz
+/log.txt
+log.txt*
+
