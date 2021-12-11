@@ -30,16 +30,15 @@ public class TaskController {
 
     @GetMapping("/task/{id}")
     public String getTask(@PathVariable Integer id, Model model){
-        TaskDescription taskDescription = tasksDataList.get(Integer.toString(id));
-        TaskDescriptionWeb task = new TaskDescriptionWeb(id, taskDescription);
+        TaskDescriptionWeb task = tasksDataList.getWeb(id - 1);
         model.addAttribute("task", task);
         return "task";
     }
     @PostMapping("/task/toggle/{id}")
     public String toggle(@PathVariable Integer id, Model model){
-        TaskDescription taskDescription = tasksDataList.get(id - 1);
-        if (taskDescription != null)
-            taskDescription.toggle();
+        TaskDescriptionWeb task = tasksDataList.getWeb(id - 1);
+        if (task != null)
+            task.toggle();
         return "redirect:/";
     }
 
@@ -47,11 +46,10 @@ public class TaskController {
     public String edit(@PathVariable Integer id, String name, Model model){
         if (nameController.checkName(name))
             return "redirect:/";
-        TaskDescription taskDescription = tasksDataList.get(id - 1);
-        if (taskDescription != null)
-            taskDescription.setName(name);
+        TaskDescriptionWeb task = tasksDataList.getWeb(id - 1);
+        if (task != null)
+            task.setName(name);
 
-        TaskDescriptionWeb task = new TaskDescriptionWeb(id, taskDescription);
         model.addAttribute("task", task);
         return "task";
     }
@@ -65,8 +63,7 @@ public class TaskController {
     @PostMapping("/tasks/add")
     public String add(String name){
         if (nameController.checkName(name)) return "redirect:/";
-        TaskDescription taskDescription = new TaskDescription(name);
-        tasksDataList.add(taskDescription);
+        tasksDataList.add(name);
 
         return "redirect:/";
     }

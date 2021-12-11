@@ -40,6 +40,17 @@ public class TasksDataList implements TasksData {
     }
 
     @Override
+    public TaskDescriptionWeb add(String name){
+        TaskDescription taskDescription = new TaskDescription(name);
+        tasks.add(taskDescription);
+
+        int id = tasks.size();
+        // TODO: correct when using multy thread
+        return new TaskDescriptionWeb(id, taskDescription);
+
+    }
+
+    @Override
     public void remove(int index){
         tasks.remove(index);
     }
@@ -54,6 +65,19 @@ public class TasksDataList implements TasksData {
     @Override
     public TaskDescription get(int index){
         return tasks.get(index);
+    }
+
+    @Override
+    public TaskDescriptionWeb getWeb(int index){
+        return new TaskDescriptionWeb(index + 1, tasks.get(index));
+    }
+
+    @Override
+    public TaskDescriptionWeb getWeb(String stringNumber){
+        int index = getIndex(stringNumber);
+        if (index != OUT_OF_INDEX)
+            return getWeb(index);
+        return null;
     }
 
     @Override

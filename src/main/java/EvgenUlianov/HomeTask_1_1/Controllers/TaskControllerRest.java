@@ -29,31 +29,30 @@ public class TaskControllerRest {
 
     @GetMapping("/{id}")
     public TaskDescriptionWeb getTask(@PathVariable Integer id){
-        TaskDescription taskDescription = tasksDataList.get(id - 1);
-        return new TaskDescriptionWeb(id, taskDescription);
+        return  tasksDataList.getWeb(id - 1);
     }
 
-    @PostMapping("/toggle/{id}")
+    @PatchMapping("/toggle/{id}")
     public TaskDescriptionWeb toggle(@PathVariable Integer id){
-        TaskDescription taskDescription = tasksDataList.get(id - 1);
-        if (taskDescription != null)
-            taskDescription.toggle();
-        return new TaskDescriptionWeb(id, taskDescription);
+        TaskDescriptionWeb taskDescriptionWeb = tasksDataList.getWeb(id - 1);
+        if (taskDescriptionWeb != null)
+            taskDescriptionWeb.toggle();
+        return taskDescriptionWeb;
     }
 
-    @PostMapping("/edit/{id}")
+    @PatchMapping("/edit/{id}")
     public TaskDescriptionWeb edit(@PathVariable Integer id,
                        @RequestParam(value = "name", required = true) String name){
         if (nameController.checkName(name))
             return null;
-        TaskDescription taskDescription = tasksDataList.get(id - 1);
-        if (taskDescription != null)
-            taskDescription.setName(name);
+        TaskDescriptionWeb taskDescriptionWeb = tasksDataList.getWeb(id - 1);
+        if (taskDescriptionWeb != null)
+            taskDescriptionWeb.setName(name);
 
-        return new TaskDescriptionWeb(id, taskDescription);
+        return taskDescriptionWeb;
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Integer id){
         tasksDataList.remove(id - 1);
         return "";
@@ -62,11 +61,8 @@ public class TaskControllerRest {
     @PostMapping("/add")
     public TaskDescriptionWeb add(
             @RequestParam(value = "name", required = true) String name){
-        if (nameController.checkName(name)) return null;
-        TaskDescription taskDescription = new TaskDescription(name);
-        tasksDataList.add(taskDescription);
-        int id = tasksDataList.size();
-        // TODO: correct when using multy thread
-        return new TaskDescriptionWeb(id, taskDescription);
+        if (nameController.checkName(name))
+            return null;
+        return tasksDataList.add(name);
     }
 }

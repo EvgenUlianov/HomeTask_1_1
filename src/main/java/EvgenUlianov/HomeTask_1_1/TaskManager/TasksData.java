@@ -9,6 +9,8 @@ public interface TasksData {
 
     void add(TaskDescription task);
 
+    TaskDescriptionWeb add(String name);
+
     void remove(int index);
 
     void remove(String stringNumber);
@@ -16,6 +18,10 @@ public interface TasksData {
     TaskDescription get(int index);
 
     TaskDescription get(String stringNumber);
+
+    TaskDescriptionWeb getWeb(int index);
+
+    TaskDescriptionWeb getWeb(String stringNumber);
 
     @Deprecated
     void printTasks(Predicate<TaskDescription> predicate);
