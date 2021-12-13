@@ -1,0 +1,26 @@
+databaseChangeLog:
+  -  changeSet:
+       id:  "001-create"
+       author:  "username"
+       changes:
+         -  createTable:
+              tableName:  taskDescription
+              columns:
+                -  column:
+                     name:  id
+                     type:  int
+                     autoIncrement:  true
+                     constraints:
+                       primaryKey:  true
+                       nullable:  false
+                -  column:
+                     name:  name
+                     type:  varchar(255)
+                     constraints:
+                       nullable:  false
+                -  column:
+                     name:  completed
+                     type:  boolean
+                     defaultValueBoolean: false
+                     constraints:
+                       nullable:  false

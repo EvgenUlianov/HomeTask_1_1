@@ -8,16 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TaskDescriptionWeb {
 
-    private final int id;
+    private final long id;
     private final String description;
     private final TaskDescription taskDescription;
 
 
 
-    public TaskDescriptionWeb(int id, TaskDescription taskDescription) {
+    public TaskDescriptionWeb(TaskDescription taskDescription) {
         this.taskDescription = taskDescription;
         this.description = String.format("[%s] %s", (taskDescription.isCompleted() ? "x" : " "), taskDescription.getName());
-        this.id = id;
+        this.id = taskDescription.getId();
     }
 
 
