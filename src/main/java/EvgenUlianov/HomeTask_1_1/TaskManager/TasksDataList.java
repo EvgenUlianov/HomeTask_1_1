@@ -40,6 +40,17 @@ public class TasksDataList implements TasksData {
     }
 
     @Override
+    public TaskDescriptionWeb add(String name){
+        TaskDescription taskDescription = new TaskDescription(name);
+        tasks.add(taskDescription);
+
+        int id = tasks.size();
+        // TODO: correct when using multy thread
+        return new TaskDescriptionWeb(id, taskDescription);
+
+    }
+
+    @Override
     public void remove(int index){
         tasks.remove(index);
     }
@@ -57,6 +68,19 @@ public class TasksDataList implements TasksData {
     }
 
     @Override
+    public TaskDescriptionWeb getWeb(int index){
+        return new TaskDescriptionWeb(index + 1, tasks.get(index));
+    }
+
+    @Override
+    public TaskDescriptionWeb getWeb(String stringNumber){
+        int index = getIndex(stringNumber);
+        if (index != OUT_OF_INDEX)
+            return getWeb(index);
+        return null;
+    }
+
+    @Override
     public TaskDescription get(String stringNumber){
         int index = getIndex(stringNumber);
         if (index != OUT_OF_INDEX)
@@ -64,6 +88,7 @@ public class TasksDataList implements TasksData {
         return null;
     }
 
+    @Deprecated
     @Override
     public void printTasks(Predicate<TaskDescription> predicate) {
         IntStream.range(0, tasks.size())
@@ -75,10 +100,25 @@ public class TasksDataList implements TasksData {
     }
 
     @Override
+    public List<TaskDescriptionWeb> getTasksWeb(Predicate<TaskDescription> predicate) {
+        List<TaskDescriptionWeb> listWeb = new ArrayList<>();
+        IntStream.range(0, tasks.size())
+                .filter((index) -> {
+                    TaskDescription task = tasks.get(index);
+                    return predicate.test(task);
+                })
+                .forEach((index) -> {listWeb.add(new TaskDescriptionWeb(index + 1, tasks.get(index)));});
+
+        return listWeb;
+    }
+
+    @Deprecated
+    @Override
     public void printTask(int key) {
         TaskDescription task = tasks.get(key);
         ioStream.println(String.format("%d. [%s] %s", key + 1, (task.isCompleted() ? "x" : " "), task.getName()));
     }
+
 
     // private service ++
 
