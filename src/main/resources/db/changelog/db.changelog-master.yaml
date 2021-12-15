@@ -1,0 +1,11 @@
+databaseChangeLog:
+#  - includeAll:
+#      path: 0.1
+#      relativeToChangeLogFile: true
+#      errorIfMissingOrEmpty: true
+      #      path: "db/changelog/0.1"
+      # выше закомментированный код не работает, никак, день убил на это...
+  - include:
+      file: db/changelog/0.1/001-create.yaml
+  - include:
+      file: db/changelog/0.1/002-long.yaml
