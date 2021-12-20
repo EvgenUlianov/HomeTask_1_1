@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Slf4j
@@ -17,6 +19,8 @@ public class TaskDescriptionService {
 
     public Iterable<TaskDescription> tasks(User user){
 //        return taskRepository.findAll(Sort.by("Id"));
+        if (user == null)
+            return new ArrayList<>();
         return taskRepository.findOwn(user.getId());
     }
 
