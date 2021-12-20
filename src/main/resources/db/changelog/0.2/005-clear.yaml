@@ -1,0 +1,7 @@
+databaseChangeLog:
+  -  changeSet:
+       id:  "005-clear"
+       author:  "username"
+       changes:
+         - delete:
+             tableName:  task_description

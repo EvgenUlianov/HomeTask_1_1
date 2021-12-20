@@ -1,0 +1,14 @@
+databaseChangeLog:
+  -  changeSet:
+       id:  "004-usersTask"
+       author:  "username"
+       changes:
+         - addColumn:
+             tableName:  taskDescription
+             columns:
+               -  column:
+                    name:  owner
+                    type:  bigint
+                    constraints:
+                      nullable:  false
+                      referencedTableName: user
