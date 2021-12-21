@@ -4,7 +4,6 @@ import EvgenUlianov.HomeTask_1_1.UserManager.User;
 import EvgenUlianov.HomeTask_1_1.repositories.TaskDescriptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ public class TaskDescriptionService {
     final private TaskDescriptionRepository taskRepository;
 
     public Iterable<TaskDescription> tasks(User user){
-//        return taskRepository.findAll(Sort.by("Id"));
         if (user == null)
             return new ArrayList<>();
         return taskRepository.findOwn(user.getId());

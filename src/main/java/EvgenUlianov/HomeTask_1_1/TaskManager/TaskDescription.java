@@ -34,9 +34,7 @@ public class TaskDescription implements  Comparable{
     }
 
     public TaskDescription(){};
-//    public String getName() {
-//        return name;
-//    }
+
 
     @Transactional
     public void setName(String name) {
@@ -57,11 +55,5 @@ public class TaskDescription implements  Comparable{
     public int compareTo(Object o) {
         return (int) (id - ((TaskDescription) o).id);
     }
-
-//    public boolean isCompleted() {
-//        return completed;
-//    }
-
-
 
 }

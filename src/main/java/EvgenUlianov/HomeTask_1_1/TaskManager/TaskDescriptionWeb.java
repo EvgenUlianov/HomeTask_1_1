@@ -1,7 +1,6 @@
 package EvgenUlianov.HomeTask_1_1.TaskManager;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Data
@@ -12,15 +11,11 @@ public class TaskDescriptionWeb {
     private final String description;
     private final TaskDescription taskDescription;
 
-
-
     public TaskDescriptionWeb(TaskDescription taskDescription) {
         this.taskDescription = taskDescription;
         this.description = String.format("[%s] %s", (taskDescription.isCompleted() ? "x" : " "), taskDescription.getName());
         this.id = taskDescription.getId();
     }
-
-
 
     public String getName() {
         return taskDescription.getName();

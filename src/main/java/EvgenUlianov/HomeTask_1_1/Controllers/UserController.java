@@ -7,11 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -21,6 +17,7 @@ public class UserController {
     //http://localhost:54322/
 
     final private UserService service;
+
     @GetMapping("/login")
     public String login(){
         return "login";

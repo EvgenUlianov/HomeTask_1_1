@@ -33,7 +33,8 @@ public class User implements UserDetails {
 
     private String role;
 
-    private transient Collection<? extends GrantedAuthority> authorities;
+    @Transient
+    private Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -41,7 +42,6 @@ public class User implements UserDetails {
             authorities = Set.of(new SimpleGrantedAuthority("ROLE_" + role));
         }
         return authorities;
-
     }
 
     @Override
