@@ -2,6 +2,7 @@ package EvgenUlianov.HomeTask_1_1;
 
 
 import EvgenUlianov.HomeTask_1_1.UserManager.User;
+import EvgenUlianov.HomeTask_1_1.UserManager.UserService;
 import EvgenUlianov.HomeTask_1_1.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,13 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 public class HomeTask11Application implements CommandLineRunner {
 
-    static final private String ADMIN_NAME = "admin";
-    static final private String ADMIN_PASSWORD = "admin";
-
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserService userService;
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(HomeTask11Application.class, args);
@@ -33,15 +29,7 @@ public class HomeTask11Application implements CommandLineRunner {
 
         log.info("Запуск программы Список задач");
 
-        User admin = userRepository.getByUsername(ADMIN_NAME);
-        if (admin == null){
-            admin = new User(ADMIN_NAME);
-            admin.setRole("ADMIN");
-            admin.setPassword(passwordEncoder.encode(ADMIN_PASSWORD));
-            userRepository.save(admin);
-        }
-
-
+        userService.addAdmin();
 
     }
 }
