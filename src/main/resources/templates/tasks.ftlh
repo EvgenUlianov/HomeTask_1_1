@@ -5,7 +5,10 @@
     <title>EvgenUlianov:HomeTask11Application</title>
 </head>
 <body>
-<h1>EvgenUlianov:HomeTask11Application</h1><hr>
+<h1>EvgenUlianov:HomeTask11Application  </h1><hr>
+<a href="/login">войти</a>
+<!--<a href="/registration">зарегистрироваться</a>-->
+<!---->
 <h3>Список задач</h3>
 <#list tasks as task>
     <div>

@@ -1,5 +1,7 @@
 package EvgenUlianov.HomeTask_1_1.TaskManager;
 
+import EvgenUlianov.HomeTask_1_1.UserManager.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,22 +22,26 @@ public class TaskDescription implements  Comparable{
     @Column
     private boolean completed;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner")
+    private User owner;
+
     public TaskDescription(String name) {
         this.name = name;
         this.completed = false;
     }
 
     public TaskDescription(){};
-//    public String getName() {
-//        return name;
-//    }
 
-    @Transactional
     public void setName(String name) {
         this.name = name;
     }
 
-    @Transactional
+    public void setOwner(User user) {
+        this.owner = user;
+    }
+
     public void toggle() {
         completed = !(completed);
     }
@@ -44,11 +50,5 @@ public class TaskDescription implements  Comparable{
     public int compareTo(Object o) {
         return (int) (id - ((TaskDescription) o).id);
     }
-
-//    public boolean isCompleted() {
-//        return completed;
-//    }
-
-
 
 }

@@ -9,3 +9,11 @@ databaseChangeLog:
       file: db/changelog/0.1/001-create.yaml
   - include:
       file: db/changelog/0.1/002-long.yaml
+  - include:
+      file: db/changelog/0.2/003-users.yaml
+  - include:
+      file: db/changelog/0.2/004-usersTask.yaml
+  - include:
+      file: db/changelog/0.2/005-clear.yaml
+  - include:
+      file: db/changelog/0.2/006-usersTask2.yaml
