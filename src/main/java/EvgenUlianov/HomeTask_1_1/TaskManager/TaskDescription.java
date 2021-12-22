@@ -27,7 +27,6 @@ public class TaskDescription implements  Comparable{
     @JoinColumn(name = "owner")
     private User owner;
 
-
     public TaskDescription(String name) {
         this.name = name;
         this.completed = false;
@@ -35,18 +34,14 @@ public class TaskDescription implements  Comparable{
 
     public TaskDescription(){};
 
-
-    @Transactional
     public void setName(String name) {
         this.name = name;
     }
 
-    @Transactional
     public void setOwner(User user) {
         this.owner = user;
     }
 
-    @Transactional
     public void toggle() {
         completed = !(completed);
     }
