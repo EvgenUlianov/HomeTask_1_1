@@ -34,8 +34,9 @@ public class TaskDescriptionService {
         if (entity != null){
             entity.get().toggle();
             taskRepository.save(entity.get());
+            return entity.get();
         }
-        return entity.get();
+        return null;
     }
 
     public TaskDescription edit(Integer id, String name, User user){
@@ -47,8 +48,9 @@ public class TaskDescriptionService {
         if (entity != null){
             entity.get().setName(name);
             taskRepository.save(entity.get());
+            return entity.get();
         }
-        return entity.get();
+        return null;
     }
 
     public void delete(Integer id, User user){
