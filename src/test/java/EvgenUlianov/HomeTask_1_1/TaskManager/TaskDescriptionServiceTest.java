@@ -3,11 +3,11 @@ package EvgenUlianov.HomeTask_1_1.TaskManager;
 import EvgenUlianov.HomeTask_1_1.UserManager.User;
 import EvgenUlianov.HomeTask_1_1.repositories.TaskDescriptionRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.invocation.Invocation;
-import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,27 +35,29 @@ class TaskDescriptionServiceTest {
         return new TaskDescription("Test");
     }
 
+    private final User testUser = getTestUser();
+    private final TaskDescription expectedTaskDescription = getTestTaskDescription();
+    private final TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
+    private TaskDescriptionService service;
 
+    @BeforeEach
+    void prepareTaskDescriptionService(){
+        service = new TaskDescriptionService(repository);
+    }
 
     @Test
-    void tasks() {
+    void tasksValid() {
 
         // initialization
-        User testUser = getTestUser();
-        TaskDescription expectedTaskDescription = getTestTaskDescription();
         Optional<TaskDescription> expectedEntity = Optional.of(expectedTaskDescription);
 
         // mockito
-        TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
         Mockito.when(repository.findOwnById(DEFAULT_ID, DEFAULT_ID))
                 .thenReturn(expectedEntity);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         TaskDescription actualTaskDescription = service.getTask(DEFAULT_ID_INTEGER, testUser);
-
         assertEquals(expectedTaskDescription, actualTaskDescription);
-
     }
 
     @Test
@@ -63,61 +65,46 @@ class TaskDescriptionServiceTest {
 
         // initialization
         User nullUser = null;
-        TaskDescription testTaskDescription = getTestTaskDescription();
         List<TaskDescription> expectedTaskDescriptions = new ArrayList(1);
 
         // mockito
-        TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
         Mockito.when(repository.findOwn(DEFAULT_ID))
                 .thenReturn(expectedTaskDescriptions);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         Iterable<TaskDescription> actualTaskDescriptions = service.tasks(nullUser);
-
         assertIterableEquals(expectedTaskDescriptions, actualTaskDescriptions);
-
     }
 
     @Test
     void getTask() {
 
         // initialization
-        User testUser = getTestUser();
-        TaskDescription testTaskDescription = getTestTaskDescription();
         List<TaskDescription> expectedTaskDescriptions = new ArrayList(1);
-        expectedTaskDescriptions.add(testTaskDescription);
+        expectedTaskDescriptions.add(expectedTaskDescription);
 
         // mockito
-        TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
         Mockito.when(repository.findOwn(DEFAULT_ID))
                 .thenReturn(expectedTaskDescriptions);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         Iterable<TaskDescription> actualTaskDescriptions = service.tasks(testUser);
-
         assertIterableEquals(expectedTaskDescriptions, actualTaskDescriptions);
-
     }
 
     @Test
-    void toggle() {
+    void toggleValidTask() {
 
         // initialization
-        User testUser = getTestUser();
-        TaskDescription expectedTaskDescription = getTestTaskDescription();
         Optional<TaskDescription> expectedEntity = Optional.of(expectedTaskDescription);
 
         // mockito
-        TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
         Mockito.when(repository.findOwnById(DEFAULT_ID, DEFAULT_ID))
                 .thenReturn(expectedEntity);
         Mockito.when(repository.save(expectedTaskDescription))
                 .thenReturn(expectedTaskDescription);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         TaskDescription actualTaskDescription = service.toggle(DEFAULT_ID_INTEGER, testUser);
 
         assertTrue(actualTaskDescription.isCompleted());
@@ -126,46 +113,33 @@ class TaskDescriptionServiceTest {
     @Test
     void toggleNoTask() {
 
-        // initialization
-        User testUser = getTestUser();
-        TaskDescription expectedTaskDescription = getTestTaskDescription();
-        Optional<TaskDescription> expectedEntity = Optional.of(expectedTaskDescription);
-
         // mockito
-        TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
         Mockito.when(repository.findOwnById(DEFAULT_ID, DEFAULT_ID))
                 .thenReturn(null);
         Mockito.when(repository.save(expectedTaskDescription))
                 .thenReturn(expectedTaskDescription);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         TaskDescription actualTaskDescription = service.toggle(DEFAULT_ID_INTEGER, testUser);
 
         assertNull(actualTaskDescription);
     }
 
     @Test
-    void edit() {
+    void editValidString() {
 
         // initialization
-        User testUser = getTestUser();
-        TaskDescription expectedTaskDescription = getTestTaskDescription();
         Optional<TaskDescription> expectedEntity = Optional.of(expectedTaskDescription);
         String expectedName = "test new";
 
         // mockito
-        TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
         Mockito.when(repository.findOwnById(DEFAULT_ID, DEFAULT_ID))
                 .thenReturn(expectedEntity);
         Mockito.when(repository.save(expectedTaskDescription))
                 .thenReturn(expectedTaskDescription);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         TaskDescription actualTaskDescription = service.edit(DEFAULT_ID_INTEGER, expectedName, testUser);
-
-//        assertTrue(actualTaskDescription.getName().equals(expectedName));
         Assertions.assertEquals(expectedName, actualTaskDescription.getName());
     }
 
@@ -173,18 +147,13 @@ class TaskDescriptionServiceTest {
     void editEmptyString() {
 
         // initialization
-        User testUser = getTestUser();
-        TaskDescription expectedTaskDescription = getTestTaskDescription();
-        Optional<TaskDescription> expectedEntity = Optional.of(expectedTaskDescription);
         String expectedName = "";
 
         // mockito
-        TaskDescriptionRepository repository = Mockito.spy(TaskDescriptionRepository.class);
         Mockito.when(repository.save(expectedTaskDescription))
                 .thenReturn(expectedTaskDescription);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         TaskDescription actualTaskDescription = service.edit(DEFAULT_ID_INTEGER, expectedName, testUser);
 
         Collection<Invocation> invocations = Mockito.mockingDetails(repository).getInvocations();
@@ -197,63 +166,39 @@ class TaskDescriptionServiceTest {
     void editNoTask() {
 
         // initialization
-        User testUser = getTestUser();
-        TaskDescription expectedTaskDescription = getTestTaskDescription();
-        Optional<TaskDescription> expectedEntity = Optional.of(expectedTaskDescription);
         String expectedName = "test new";
 
         // mockito
-        TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
         Mockito.when(repository.findOwnById(DEFAULT_ID, DEFAULT_ID))
                 .thenReturn(null);
         Mockito.when(repository.save(expectedTaskDescription))
                 .thenReturn(expectedTaskDescription);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         TaskDescription actualTaskDescription = service.edit(DEFAULT_ID_INTEGER, expectedName, testUser);
-
         assertNull(actualTaskDescription);
     }
 
     @Test
     void delete() {
 
-        // initialization
-        User testUser = getTestUser();
-
-        // mockito
-        TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
-        Answer<?> var1 = invocationOnMock -> {;
-            return null;
-        };
-        Mockito.when(repository.deleteOwnById(DEFAULT_ID, DEFAULT_ID))
-                .then(var1);
-
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
-
         assertDoesNotThrow(()->{service.delete(DEFAULT_ID_INTEGER, testUser);});
     }
 
     @Test
-    void add() {
+    void addValidString() {
 
         // initialization
-        User testUser = getTestUser();
-        TaskDescription expectedTaskDescription = getTestTaskDescription();
-        Optional<TaskDescription> expectedEntity = Optional.of(expectedTaskDescription);
         String expectedName = "test new";
 
         // mockito
-        TaskDescriptionRepository repository = Mockito.mock(TaskDescriptionRepository.class);
         Mockito.when(repository.save(expectedTaskDescription))
                 .thenReturn(expectedTaskDescription);
 
         ArgumentCaptor<TaskDescription> argumentCaptor = ArgumentCaptor.forClass(TaskDescription.class);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         service.add(expectedName, testUser);
 
         Mockito.verify(repository).save(argumentCaptor.capture());
@@ -264,18 +209,13 @@ class TaskDescriptionServiceTest {
     void addEmptyString() {
 
         // initialization
-        User testUser = getTestUser();
-        TaskDescription expectedTaskDescription = getTestTaskDescription();
-        Optional<TaskDescription> expectedEntity = Optional.of(expectedTaskDescription);
         String expectedName = "";
 
         // mockito
-        TaskDescriptionRepository repository = Mockito.spy(TaskDescriptionRepository.class);
         Mockito.when(repository.save(expectedTaskDescription))
                 .thenReturn(expectedTaskDescription);
 
         // run test
-        TaskDescriptionService service = new TaskDescriptionService(repository);
         service.add(expectedName, testUser);
 
         Collection<Invocation> invocations = Mockito.mockingDetails(repository).getInvocations();
