@@ -2,6 +2,7 @@ package EvgenUlianov.HomeTask_1_1.Controllers;
 
 import EvgenUlianov.HomeTask_1_1.TaskManager.TaskDescriptionService;
 import EvgenUlianov.HomeTask_1_1.UserManager.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.Invocation;
@@ -33,18 +34,20 @@ class TaskControllerRestTest {
         // run test
         TaskControllerRest controller = new TaskControllerRest(service);
         switch (methodName){
-            case "tasks": {controller.tasks(testUser);} break;
+            case "tasks": {  controller.tasks(testUser);} break;
             case "getTask": {controller.getTask(1, testUser);}break;
-            case "toggle": {controller.toggle(1, testUser);}break;
-            case "edit": {controller.edit(1, "name", testUser);}break;
-            case "delete": {controller.delete(1, testUser);}break;
-            case "add": {controller.add("name", testUser);}break;
+            case "toggle": { controller.toggle(1, testUser);}break;
+            case "edit": {   controller.edit(1, "name", testUser);}break;
+            case "delete": { controller.delete(1, testUser);}break;
+            case "add": {    controller.add("name", testUser);}break;
         }
 
         Collection<Invocation> invocations = Mockito.mockingDetails(service).getInvocations();
         // just a number of calls of any mock's methods
         assertEquals(1, invocations.size());
-
+        // check the name of called method
+        if (invocations.size() == 1)
+            Assertions.assertEquals(methodName, ((Invocation) invocations.toArray()[0]).getMethod().getName());
     }
 
     @Test

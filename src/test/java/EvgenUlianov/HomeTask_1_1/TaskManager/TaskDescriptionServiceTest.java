@@ -65,15 +65,10 @@ class TaskDescriptionServiceTest {
 
         // initialization
         User nullUser = null;
-        List<TaskDescription> expectedTaskDescriptions = new ArrayList(1);
-
-        // mockito
-        Mockito.when(repository.findOwn(DEFAULT_ID))
-                .thenReturn(expectedTaskDescriptions);
 
         // run test
         Iterable<TaskDescription> actualTaskDescriptions = service.tasks(nullUser);
-        assertIterableEquals(expectedTaskDescriptions, actualTaskDescriptions);
+        assertEquals(0, ((List)actualTaskDescriptions).size());
     }
 
     @Test
@@ -101,12 +96,9 @@ class TaskDescriptionServiceTest {
         // mockito
         Mockito.when(repository.findOwnById(DEFAULT_ID, DEFAULT_ID))
                 .thenReturn(expectedEntity);
-        Mockito.when(repository.save(expectedTaskDescription))
-                .thenReturn(expectedTaskDescription);
 
         // run test
         TaskDescription actualTaskDescription = service.toggle(DEFAULT_ID_INTEGER, testUser);
-
         assertTrue(actualTaskDescription.isCompleted());
     }
 
@@ -116,12 +108,9 @@ class TaskDescriptionServiceTest {
         // mockito
         Mockito.when(repository.findOwnById(DEFAULT_ID, DEFAULT_ID))
                 .thenReturn(null);
-        Mockito.when(repository.save(expectedTaskDescription))
-                .thenReturn(expectedTaskDescription);
 
         // run test
         TaskDescription actualTaskDescription = service.toggle(DEFAULT_ID_INTEGER, testUser);
-
         assertNull(actualTaskDescription);
     }
 
@@ -135,8 +124,6 @@ class TaskDescriptionServiceTest {
         // mockito
         Mockito.when(repository.findOwnById(DEFAULT_ID, DEFAULT_ID))
                 .thenReturn(expectedEntity);
-        Mockito.when(repository.save(expectedTaskDescription))
-                .thenReturn(expectedTaskDescription);
 
         // run test
         TaskDescription actualTaskDescription = service.edit(DEFAULT_ID_INTEGER, expectedName, testUser);
@@ -149,14 +136,11 @@ class TaskDescriptionServiceTest {
         // initialization
         String expectedName = "";
 
-        // mockito
-        Mockito.when(repository.save(expectedTaskDescription))
-                .thenReturn(expectedTaskDescription);
-
         // run test
         TaskDescription actualTaskDescription = service.edit(DEFAULT_ID_INTEGER, expectedName, testUser);
 
         Collection<Invocation> invocations = Mockito.mockingDetails(repository).getInvocations();
+
         // just a number of calls of any mock's methods
         assertEquals(0, invocations.size());
         assertNull(actualTaskDescription);
@@ -171,8 +155,6 @@ class TaskDescriptionServiceTest {
         // mockito
         Mockito.when(repository.findOwnById(DEFAULT_ID, DEFAULT_ID))
                 .thenReturn(null);
-        Mockito.when(repository.save(expectedTaskDescription))
-                .thenReturn(expectedTaskDescription);
 
         // run test
         TaskDescription actualTaskDescription = service.edit(DEFAULT_ID_INTEGER, expectedName, testUser);
@@ -192,10 +174,6 @@ class TaskDescriptionServiceTest {
         // initialization
         String expectedName = "test new";
 
-        // mockito
-        Mockito.when(repository.save(expectedTaskDescription))
-                .thenReturn(expectedTaskDescription);
-
         ArgumentCaptor<TaskDescription> argumentCaptor = ArgumentCaptor.forClass(TaskDescription.class);
 
         // run test
@@ -210,10 +188,6 @@ class TaskDescriptionServiceTest {
 
         // initialization
         String expectedName = "";
-
-        // mockito
-        Mockito.when(repository.save(expectedTaskDescription))
-                .thenReturn(expectedTaskDescription);
 
         // run test
         service.add(expectedName, testUser);
