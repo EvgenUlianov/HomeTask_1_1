@@ -1,5 +1,6 @@
 package EvgenUlianov.HomeTask_1_1.TaskManager;
 
+import EvgenUlianov.HomeTask_1_1.Controllers.TaskControllerRest;
 import EvgenUlianov.HomeTask_1_1.UserManager.User;
 import EvgenUlianov.HomeTask_1_1.repositories.TaskDescriptionRepository;
 import org.junit.jupiter.api.Assertions;
@@ -9,10 +10,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.invocation.Invocation;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,6 +56,8 @@ class TaskDescriptionServiceTest {
         // run test
         TaskDescription actualTaskDescription = service.getTask(DEFAULT_ID_INTEGER, testUser);
         assertEquals(expectedTaskDescription, actualTaskDescription);
+
+        assertSimpleTest("findOwnById");
     }
 
     @Test
@@ -85,6 +85,8 @@ class TaskDescriptionServiceTest {
         // run test
         Iterable<TaskDescription> actualTaskDescriptions = service.tasks(testUser);
         assertIterableEquals(expectedTaskDescriptions, actualTaskDescriptions);
+        assertSimpleTest("findOwn");
+
     }
 
     @Test
@@ -100,6 +102,7 @@ class TaskDescriptionServiceTest {
         // run test
         TaskDescription actualTaskDescription = service.toggle(DEFAULT_ID_INTEGER, testUser);
         assertTrue(actualTaskDescription.isCompleted());
+        assertHardTest(new ArrayList<String>(Arrays.asList(new String[]{"findOwnById", "save"})));
     }
 
     @Test
@@ -112,6 +115,7 @@ class TaskDescriptionServiceTest {
         // run test
         TaskDescription actualTaskDescription = service.toggle(DEFAULT_ID_INTEGER, testUser);
         assertNull(actualTaskDescription);
+        assertSimpleTest("findOwnById");
     }
 
     @Test
@@ -128,6 +132,8 @@ class TaskDescriptionServiceTest {
         // run test
         TaskDescription actualTaskDescription = service.edit(DEFAULT_ID_INTEGER, expectedName, testUser);
         Assertions.assertEquals(expectedName, actualTaskDescription.getName());
+
+        assertHardTest(new ArrayList<String>(Arrays.asList(new String[]{"findOwnById", "save"})));
     }
 
     @Test
@@ -144,6 +150,7 @@ class TaskDescriptionServiceTest {
         // just a number of calls of any mock's methods
         assertEquals(0, invocations.size());
         assertNull(actualTaskDescription);
+
     }
 
     @Test
@@ -159,6 +166,7 @@ class TaskDescriptionServiceTest {
         // run test
         TaskDescription actualTaskDescription = service.edit(DEFAULT_ID_INTEGER, expectedName, testUser);
         assertNull(actualTaskDescription);
+        assertSimpleTest("findOwnById");
     }
 
     @Test
@@ -166,6 +174,7 @@ class TaskDescriptionServiceTest {
 
         // run test
         assertDoesNotThrow(()->{service.delete(DEFAULT_ID_INTEGER, testUser);});
+        assertSimpleTest("deleteOwnById");
     }
 
     @Test
@@ -181,6 +190,7 @@ class TaskDescriptionServiceTest {
 
         Mockito.verify(repository).save(argumentCaptor.capture());
         Assertions.assertEquals(expectedName, argumentCaptor.getValue().getName());
+        assertSimpleTest("save");
     }
 
     @Test
@@ -196,4 +206,32 @@ class TaskDescriptionServiceTest {
         // just a number of calls of any mock's methods
         assertEquals(0, invocations.size());
     }
+
+
+    private void assertSimpleTest(String methodName){
+
+        Collection<Invocation> invocations = Mockito.mockingDetails(repository).getInvocations();
+        // just a number of calls of any mock's methods
+        assertEquals(1, invocations.size());
+        // check the name of called method
+        if (invocations.size() == 1)
+            Assertions.assertEquals(methodName, ((Invocation) invocations.toArray()[0]).getMethod().getName());
+    }
+
+    private void assertHardTest(List<String> methodNamesExtended){
+
+        Collection<Invocation> invocations = Mockito.mockingDetails(repository).getInvocations();
+        // just a number of calls of any mock's methods
+
+        List<String> methodNamesActual  = new ArrayList<>();
+        for (Invocation invocation: invocations)
+            methodNamesActual.add(invocation.getMethod().getName());
+
+        assertIterableEquals(methodNamesExtended, methodNamesActual );
+        // check the name of called method
+//        if (invocations.size() == 1)
+//            Assertions.assertEquals(methodName, ((Invocation) invocations.toArray()[0]).getMethod().getName());
+    }
+
+
 }
