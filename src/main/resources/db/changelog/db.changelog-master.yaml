@@ -7,8 +7,8 @@ databaseChangeLog:
       # выше закомментированный код не работает, никак, день убил на это...
   - include:
       file: db/changelog/0.1/001-create.yaml
-  - include:
-      file: db/changelog/0.1/002-long.yaml
+#  - include:
+#      file: db/changelog/0.1/002-long.yaml
   - include:
       file: db/changelog/0.2/003-users.yaml
   - include:
@@ -17,3 +17,7 @@ databaseChangeLog:
       file: db/changelog/0.2/005-clear.yaml
   - include:
       file: db/changelog/0.2/006-usersTask2.yaml
+  - include:
+      file: db/changelog/0.2/007-usersTask3.yaml
+  - include:
+      file: db/changelog/0.2/008-insert.yaml

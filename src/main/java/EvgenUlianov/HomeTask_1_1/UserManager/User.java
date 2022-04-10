@@ -15,14 +15,14 @@ import java.util.Set;
 @Table(name = "\"user\"")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @JsonIgnore
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     public User(String username) {
@@ -31,6 +31,7 @@ public class User implements UserDetails {
 
     public User(){};
 
+    @Column(name = "role", nullable = false)
     private String role;
 
     @Transient

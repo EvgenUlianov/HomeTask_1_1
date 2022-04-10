@@ -1,6 +1,6 @@
 databaseChangeLog:
   -  changeSet:
-       id:  "004-usersTask"
+       id:  "007-usersTask3"
        author:  "username"
        changes:
          - addColumn:

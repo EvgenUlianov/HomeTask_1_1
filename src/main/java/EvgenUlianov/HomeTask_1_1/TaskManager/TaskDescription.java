@@ -9,11 +9,11 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "taskDescription")
+@Table(name = "task_description")
 public class TaskDescription implements  Comparable{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false, unique = true)
