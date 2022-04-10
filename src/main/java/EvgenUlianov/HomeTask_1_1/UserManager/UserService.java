@@ -44,7 +44,7 @@ public class UserService {
 
     public void addAdmin(){
         User admin = userRepository.getByUsername(ADMIN_NAME);
-            if (admin == null){
+        if (admin == null){
             admin = new User(ADMIN_NAME);
             admin.setRole("ADMIN");
             admin.setPassword(passwordEncoder.encode(ADMIN_PASSWORD));

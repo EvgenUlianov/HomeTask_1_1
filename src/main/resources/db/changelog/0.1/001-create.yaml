@@ -4,11 +4,11 @@ databaseChangeLog:
        author:  "username"
        changes:
          -  createTable:
-              tableName:  taskDescription
+              tableName:  task_description
               columns:
                 -  column:
                      name:  id
-                     type:  int
+                     type:  bigint
                      autoIncrement:  true
                      constraints:
                        primaryKey:  true

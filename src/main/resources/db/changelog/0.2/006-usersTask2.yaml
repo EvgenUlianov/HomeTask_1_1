@@ -3,12 +3,8 @@ databaseChangeLog:
        id:  "006-usersTask2"
        author:  "username"
        changes:
-         - addColumn:
+         - dropColumn:
              tableName:  task_description
              columns:
                -  column:
                     name:  owner
-                    type:  bigint
-                    constraints:
-                      nullable:  false
-                      referencedTableName: user

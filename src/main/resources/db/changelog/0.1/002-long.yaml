@@ -1,9 +1,0 @@
-databaseChangeLog:
-  -  changeSet:
-       id:  "002-long"
-       author:  "username"
-       changes:
-         - modifyDataType:
-             columnName: id
-             newDataType: bigint
-             tableName: taskDescription

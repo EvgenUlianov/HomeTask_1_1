@@ -24,6 +24,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                         .and()
                 .authorizeRequests()
+                        .antMatchers("/hello")//
+                        .permitAll()
+                        .and()
+                .authorizeRequests()
                         .antMatchers("/task/**", "/tasks/**", "/taskRest/**")//
                         .hasRole("USER")
                         .and()
